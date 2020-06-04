@@ -451,7 +451,7 @@ func (v *CacheParameterGroup) Validate() error {
 }
 
 type CachePrivateIP struct {
-	CacheNodeID *string `json:"cache_node_id" name:"cache_node_id"`
+	CacheNodeID *string `json:"cache_node_id,omitempty" name:"cache_node_id"`
 	// CacheRole's available values: master, slave
 	CacheRole  *string `json:"cache_role" name:"cache_role"`
 	PrivateIPs *string `json:"private_ips" name:"private_ips"`
@@ -1135,9 +1135,14 @@ type InstanceType struct {
 	InstanceTypeName *string `json:"instance_type_name" name:"instance_type_name"`
 	MemoryCurrent    *int    `json:"memory_current" name:"memory_current"`
 	// Status's available values: available, deprecated
-	Status       *string `json:"status" name:"status"`
-	VCPUsCurrent *int    `json:"vcpus_current" name:"vcpus_current"`
-	ZoneID       *string `json:"zone_id" name:"zone_id"`
+	Status        *string `json:"status" name:"status"`
+	VCPUsCurrent  *int    `json:"vcpus_current" name:"vcpus_current"`
+	ResourceClass *int    `json:"resource_class" name:"resource_class"`
+	ResourceType  *string `json:"resource_type" name:"resource_type"`
+	ResourceQos   *string `json:"resource_qos" name: "resource_qos"`
+	Baremetal     *bool   `json:"baremetal" name:"baremetal"`
+	ExtraInfo     *string `json:"extra_info" name:"extra_info"`
+	ZoneID        *string `json:"zone_id" name:"zone_id"`
 }
 
 func (v *InstanceType) Validate() error {
@@ -1209,6 +1214,7 @@ type Job struct {
 	// Status's available values: pending, working, failed, successful, done with failure
 	Status     *string    `json:"status" name:"status"`
 	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	ErrCodes   *string    `json:"error_codes" name:"error_codes"`
 }
 
 func (v *Job) Validate() error {
@@ -1306,6 +1312,16 @@ type LoadBalancer struct {
 	// TransitionStatus's available values: creating, starting, stopping, updating, suspending, resuming, deleting
 	TransitionStatus *string `json:"transition_status" name:"transition_status"`
 	VxNetID          *string `json:"vxnet_id" name:"vxnet_id"`
+	Features         *int    `json:"features" name:"features"`
+	Rsyslog          *string `json:"rsyslog" name:"rsyslog"`
+	Owner            *string `json:"owner" name:"owner"`
+	SubCode          *int    `json:"sub_code" name:"sub_code"`
+	Vxnet            *VxNet  `json:"vxnet" name:"vxnet"`
+	Repl             *string `json:"repl" name:"repl"`
+	WafPg            *string `json:"waf_pg" name:"waf_pg"`
+	Hypervisor       *string `json:"hypervisor" name:"hypervisor"`
+	Mode             *int    `json:"mode" name:"mode"`
+	HttpHeaderSize   *int    `json:"http_header_size" name:"http_header_size"`
 }
 
 func (v *LoadBalancer) Validate() error {
@@ -1436,6 +1452,8 @@ type LoadBalancerBackend struct {
 	ResourceID              *string    `json:"resource_id" name:"resource_id"`
 	Status                  *string    `json:"status" name:"status"`
 	Weight                  *int       `json:"weight" name:"weight"`
+	Disabled                *int       `json:"disabled" name:"disabled"`
+	LoadbalancerPolicyName  *string    `json:"loadbalancer_policy_name" name:"loadbalancer_policy_name"`
 }
 
 func (v *LoadBalancerBackend) Validate() error {
@@ -1461,6 +1479,7 @@ type LoadBalancerListener struct {
 	ServerCertificateID      []*string  `json:"server_certificate_id" name:"server_certificate_id"`
 	SessionSticky            *string    `json:"session_sticky" name:"session_sticky"`
 	Timeout                  *int       `json:"timeout" name:"timeout"`
+	Disabled                 *int       `json:"disabled" name:"disabled" location:"params"`
 }
 
 func (v *LoadBalancerListener) Validate() error {
@@ -1972,13 +1991,20 @@ type RDB struct {
 	RDBName             *string    `json:"rdb_name" name:"rdb_name"`
 	RDBType             *int       `json:"rdb_type" name:"rdb_type"`
 	// Status's available values: pending, active, stopped, deleted, suspended, ceased
-	Status      *string `json:"status" name:"status"`
-	StatusTime  *string `json:"status_time" name:"status_time"`
-	StorageSize *int    `json:"storage_size" name:"storage_size"`
-	Tags        []*Tag  `json:"tags" name:"tags"`
+	Status      *string    `json:"status" name:"status"`
+	StatusTime  *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	StorageSize *int       `json:"storage_size" name:"storage_size"`
+	Tags        []*Tag     `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, stopping, starting, deleting, backup-creating, temp-creating, configuring, switching, invalid-tackling, resizing, suspending, ceasing, instance-ceasing, vxnet-leaving, vxnet-joining
-	TransitionStatus *string `json:"transition_status" name:"transition_status"`
-	VxNet            *VxNet  `json:"vxnet" name:"vxnet"`
+	TransitionStatus  *string `json:"transition_status" name:"transition_status"`
+	VxNet             *VxNet  `json:"vxnet" name:"vxnet"`
+	RDBClass          *int    `json:"rdb_class" name:"rdb_class"`
+	WVip              *string `json:"wvip" name:"wvip"`
+	RVip              *string `json:"rvip" name:"rvip"`
+	Port              *int    `json:"port" name:"port"`
+	SecurityGroupId   *string `json:"security_group_id" name:"security_group_id"`
+	RDBParameterGroup *string `json:"rdb_parameter_group" name:"rdb_parameter_group"`
+	Features          *int    `json:"features" name:"features"`
 }
 
 func (v *RDB) Validate() error {
@@ -3158,8 +3184,9 @@ type Volume struct {
 	VolumeID         *string `json:"volume_id" name:"volume_id"`
 	VolumeName       *string `json:"volume_name" name:"volume_name"`
 	// VolumeType's available values: 0, 1, 2, 3
-	VolumeType *int    `json:"volume_type" name:"volume_type"`
-	ZoneID     *string `json:"zone_id" name:"zone_id"`
+	VolumeType   *int    `json:"volume_type" name:"volume_type"`
+	ZoneID       *string `json:"zone_id" name:"zone_id"`
+	ReplicaCount *int    `json:"replica_count" name:"replica_count"`
 }
 
 func (v *Volume) Validate() error {

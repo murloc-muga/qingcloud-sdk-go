@@ -369,3 +369,11 @@ type ModifyTagAttributesOutput struct {
 	Action  *string `json:"action" name:"action" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
+
+func TagsToMap(tags []*Tag) map[string]string {
+	result := make(map[string]string)
+	for _, t := range tags {
+		result[StringValue(t.TagID)] = StringValue(t.TagName)
+	}
+	return result
+}

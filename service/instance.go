@@ -997,3 +997,51 @@ type TerminateInstancesOutput struct {
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
+
+func (s *InstanceService) CloneInstances(i *CloneInstancesInput) (*CloneInstancesOutput, error) {
+	if i == nil {
+		i = &CloneInstancesInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "CloneInstances",
+		RequestMethod: "GET",
+	}
+
+	x := &CloneInstancesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type CloneInstancesInput struct {
+	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
+	VxNets    []*string `json:"vxnets" name:"vxnets" location:"params"`
+}
+type CloneInstancesOutput struct {
+	Action    *string   `json:"action" name:"action" location:"elements"`
+	JobID     *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode   *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Instances []*string `json:"instances" name:"instances" location:"elements"`
+}
+
+func (v *CloneInstancesInput) Validate() error {
+
+	if len(v.Instances) == 0 {
+		return errors.ParameterRequiredError{
+			ParameterName: "Instances",
+			ParentName:    "CloneInstancesInput",
+		}
+	}
+
+	return nil
+}

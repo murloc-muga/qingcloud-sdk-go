@@ -252,10 +252,11 @@ type CreateRDBInput struct {
 	RDBName     *string `json:"rdb_name" name:"rdb_name" location:"params"`
 	RDBPassword *string `json:"rdb_password" name:"rdb_password" location:"params"` // Required
 	// RDBType's available values: 1, 2, 4, 8, 16, 32
-	RDBType     *int    `json:"rdb_type" name:"rdb_type" location:"params"`         // Required
-	RDBUsername *string `json:"rdb_username" name:"rdb_username" location:"params"` // Required
-	StorageSize *int    `json:"storage_size" name:"storage_size" location:"params"` // Required
-	VxNet       *string `json:"vxnet" name:"vxnet" location:"params"`               // Required
+	RDBType        *int    `json:"rdb_type" name:"rdb_type" location:"params"`         // Required
+	RDBUsername    *string `json:"rdb_username" name:"rdb_username" location:"params"` // Required
+	StorageSize    *int    `json:"storage_size" name:"storage_size" location:"params"` // Required
+	VxNet          *string `json:"vxnet" name:"vxnet" location:"params"`               // Required
+	ParameterGroup *string `json:"parameter_group" name:"parameter_group" location:"parameter_group"`
 }
 
 func (v *CreateRDBInput) Validate() error {

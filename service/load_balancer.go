@@ -1098,6 +1098,7 @@ type DescribeLoadBalancersOutput struct {
 	Action          *string         `json:"action" name:"action" location:"elements"`
 	LoadBalancerSet []*LoadBalancer `json:"loadbalancer_set" name:"loadbalancer_set" location:"elements"`
 	RetCode         *int            `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount      *int            `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/describe_server_certificates.html
@@ -1329,6 +1330,7 @@ type ModifyLoadBalancerAttributesInput struct {
 	NodeCount        *int    `json:"node_count" name:"node_count" location:"params"`
 	PrivateIP        *string `json:"private_ip" name:"private_ip" location:"params"`
 	SecurityGroup    *string `json:"security_group" name:"security_group" location:"params"`
+	WafPg            *string `json:"waf_pg" name:"waf_pg" location:"params"`
 }
 
 func (v *ModifyLoadBalancerAttributesInput) Validate() error {
@@ -1454,6 +1456,7 @@ type ModifyLoadBalancerListenerAttributesInput struct {
 	ServerCertificateID      []*string `json:"server_certificate_id" name:"server_certificate_id" location:"params"`
 	SessionSticky            *string   `json:"session_sticky" name:"session_sticky" location:"params"`
 	Timeout                  *int      `json:"timeout" name:"timeout" location:"params"`
+	Disabled                 *int      `json:"disabled" name:"disabled" location:"params"`
 }
 
 func (v *ModifyLoadBalancerListenerAttributesInput) Validate() error {

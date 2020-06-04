@@ -1089,3 +1089,94 @@ type RollbackSecurityGroupOutput struct {
 	SecurityGroupID         *string `json:"security_group_id" name:"security_group_id" location:"elements"`
 	SecurityGroupSnapshotID *string `json:"security_group_snapshot_id" name:"security_group_snapshot_id" location:"elements"`
 }
+
+func (s *SecurityGroupService) RemoveSecurityGroupFromResources(i *RemoveSecurityGroupFromResourcesInput) (*RemoveSecurityGroupFromResourcesOutput, error) {
+	if i == nil {
+		i = &RemoveSecurityGroupFromResourcesInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "RemoveSecurityGroupFromResources",
+		RequestMethod: "GET",
+	}
+
+	x := &RemoveSecurityGroupFromResourcesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type RemoveSecurityGroupFromResourcesInput struct {
+	Resources []*string `json:"resources" name:"resources" location:"params"`
+}
+
+func (v *RemoveSecurityGroupFromResourcesInput) Validate() error {
+	return nil
+}
+
+type RemoveSecurityGroupFromResourcesOutput struct {
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+func (s *SecurityGroupService) ApplySecurityGroupToResources(i *ApplySecurityGroupToResourcesInput) (*ApplySecurityGroupToResourcesOutput, error) {
+	if i == nil {
+		i = &ApplySecurityGroupToResourcesInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "ApplySecurityGroupToResources",
+		RequestMethod: "GET",
+	}
+
+	x := &ApplySecurityGroupToResourcesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type ApplySecurityGroupToResourcesInput struct {
+	SecurityGroup *string   `json:"security_group" name:"security_group" location:"params"`
+	Resources     []*string `json:"resources" name:"resources" location:"params"`
+}
+
+func (v *ApplySecurityGroupToResourcesInput) Validate() error {
+	if v.SecurityGroup == nil {
+		return errors.ParameterRequiredError{
+			ParameterName: "SecurityGroup",
+			ParentName:    "ApplySecurityGroupToResourcesInput",
+		}
+	}
+	if len(v.Resources) == 0 {
+		return errors.ParameterRequiredError{
+			ParameterName: "Resources",
+			ParentName:    "ApplySecurityGroupToResourcesInput",
+		}
+	}
+	return nil
+}
+
+type ApplySecurityGroupToResourcesOutput struct {
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
